@@ -1276,10 +1276,12 @@ class FA(FileResource):
                 Psurf = self.readfield('SURFPRESSION')
                 if Psurf.spectral:
                     Psurf.sp2gp()
-                ps_transect = numpy.exp(Psurf.getvalue_ll(*geometry.get_lonlat_grid(),
+                ps_transect = Psurf.getvalue_ll(*geometry.get_lonlat_grid(),
                                                           interpolation=interpolation,
                                                           one=False,
-                                                          external_distance=external_distance))
+                                                          external_distance=external_distance)
+                if ps_transect.mean() < 100. : 
+                    ps_transect = numpy.exp(ps_transect)
                 ps_transect = ps_transect.reshape(h_shape)
                 del Psurf
             # P => H necessary profiles
